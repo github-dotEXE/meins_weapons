@@ -1,6 +1,6 @@
 name: meins_weapons
 version: '${project.version}'
-main: de.ender.meins_weapons.Meins_weapons
+main: de.ender.meins_weapons.Main
 api-version: 1.20
 depend: [meins_core]
 authors: [ender__exe]

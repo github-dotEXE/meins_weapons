@@ -1,14 +1,9 @@
 package de.ender.meins_weapons;
 
 import de.ender.core.ItemBuilder;
-import de.ender.core.Log;
 import de.ender.core.weapons.Weapon;
 import de.ender.core.weapons.Weapons;
-import io.papermc.paper.event.entity.EntityMoveEvent;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;

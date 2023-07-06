@@ -15,6 +15,8 @@ public final class Main extends JavaPlugin {
 
         new TestWeapon().init();
         new ShortBow().init();
+        new FireBall().init();
+        new WandOfFire().init();
     }
 
     @Override

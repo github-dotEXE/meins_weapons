@@ -2,12 +2,10 @@ package de.ender.meins_weapons;
 
 import de.ender.core.ItemBuilder;
 import de.ender.core.Main;
+import de.ender.core.customItems.CustomItems;
 import de.ender.core.weapons.Weapon;
-import de.ender.core.weapons.Weapons;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,7 +21,7 @@ public class TestWeapon implements Weapon {
 
     @Override
     public ItemStack getItem() {
-        return new ItemBuilder(Material.IRON_NUGGET,1).setLoreAt(0, ChatColor.GRAY+getUUID().toString()).setName("§b"+getName()).build();
+        return new ItemBuilder(Material.IRON_NUGGET,1).setName("§b"+getName()).build();
     }
 
     @Override
@@ -32,12 +30,12 @@ public class TestWeapon implements Weapon {
     }
 
     @Override
-    public void useEffects(Player player, Weapons.UseType useType) {
+    public void useEffects(Player player, CustomItems.UseType useType) {
         player.sendMessage(useType.toString());
     }
 
     @Override
-    public ItemStack getAmmoItem(Weapons.UseType useType) {
+    public ItemStack getAmmoItem(CustomItems.UseType useType) {
         return new ItemBuilder(Material.DIRT,1).build();
     }
 
@@ -52,7 +50,26 @@ public class TestWeapon implements Weapon {
     }
 
     @Override
-    public void rangedEntityHit(Player player, EntityDamageByEntityEvent event) {
+    public void missingRequirements(Player player) {
+        Weapon.super.missingRequirements(player);
+        player.sendMessage("MissingReqirements");
+    }
 
+    @Override
+    public void error(Player player) {
+        Weapon.super.error(player);
+        player.sendMessage("Error");
+    }
+
+    @Override
+    public void onCooldown(Player player) {
+        Weapon.super.onCooldown(player);
+        player.sendMessage("OnCooldown");
+    }
+
+    @Override
+    public void noAmmo(Player player) {
+        Weapon.super.noAmmo(player);
+        player.sendMessage("NoAmmo");
     }
 }

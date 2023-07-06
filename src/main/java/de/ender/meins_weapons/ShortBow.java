@@ -1,14 +1,12 @@
 package de.ender.meins_weapons;
 
 import de.ender.core.ItemBuilder;
+import de.ender.core.customItems.CustomItems;
 import de.ender.core.weapons.Weapon;
-import de.ender.core.weapons.Weapons;
 import org.bukkit.Material;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -46,7 +44,7 @@ public class ShortBow implements Weapon {
     }
 
     @Override
-    public void useEffects(Player player, Weapons.UseType useType) {
+    public void useEffects(Player player, CustomItems.UseType useType) {
         Arrow arrow = player.launchProjectile(Arrow.class);
         float projectileSpeed = 1;
         arrow.setVelocity(arrow.getVelocity().multiply(projectileSpeed));
@@ -55,7 +53,7 @@ public class ShortBow implements Weapon {
     }
 
     @Override
-    public ItemStack getAmmoItem(Weapons.UseType useType) {
+    public ItemStack getAmmoItem(CustomItems.UseType useType) {
         return new ItemBuilder(Material.ARROW,1).build();
     }
 
@@ -67,15 +65,5 @@ public class ShortBow implements Weapon {
     @Override
     public boolean hasRequirements(Player player) {
         return true;
-    }
-
-    @Override
-    public void rangedEntityHit(Player player, EntityDamageByEntityEvent event) {
-        Weapon.super.rangedEntityHit(player,event);
-    }
-
-    @Override
-    public void rangedHit(Player player, ProjectileHitEvent event) {
-        Weapon.super.rangedHit(player, event);
     }
 }

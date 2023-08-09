@@ -4,3 +4,6 @@ main: de.ender.meins_weapons.Main
 api-version: 1.20
 depend: [meins_core]
 authors: [ender__exe]
+commands:
+  teststand:
+    description: /teststand

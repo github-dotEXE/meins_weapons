@@ -1,91 +1,72 @@
 package de.ender.meins_weapons;
 
 import de.ender.core.ItemBuilder;
-import de.ender.core.customItems.CustomItems;
 import de.ender.core.weapons.Weapon;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Fire;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
-public class WandOfFire implements Weapon {
-    @Override
-    public JavaPlugin getPlugin() {
-        return Main.getPlugin();
+public class WandOfFire extends Weapon {
+
+
+    public WandOfFire() {
+        super("Wand-of-Fire", Main.getPlugin(), 1, 8, false, false,
+                false, Sound.ITEM_FIRECHARGE_USE, 1, 2);
+    }
+    
+    public ItemStack getItemStack() {
+        return new ItemBuilder(Material.STICK,1).addEnchantmentGlint().addEnchantmentGlint().setName("<aqua>"+getName()).build();
     }
 
-    @Override
-    public String getName() {
-        return "Wand-of-Fire";
-    }
-
-    @Override
-    public ItemStack getItem() {
-        return new ItemBuilder(Material.STICK,1).addEnchantmentGlint().addEnchantmentGlint().setName("§b"+getName()).build();
-    }
-
-    @Override
+    
     public ShapedRecipe getRecipe() {
-        return Weapon.super.getRecipe().shape(
+        return super.getRecipe().shape(
                 "F  ",
                 " S ",
                 "  S")
                 .setIngredient('F',new FireBall().getItem())
                 .setIngredient('S',Material.STICK);
     }
-
-    @Override
+    
     public void rangedEntityHit(Player player, EntityDamageByEntityEvent event) {
-        Weapon.super.rangedEntityHit(player, event);
         event.getEntity().setFireTicks(20);
+        super.rangedEntityHit(player, event);
+    }
+    
+    public void useEffects(Player player, UseType useType) {
+        shootItem(player,2,new ItemBuilder(Material.COAL,1).addEnchantmentGlint().build(),
+                0.10F,5,false,true,true);
     }
 
-    @Override
-    public long getReloadTime() {
-        return 1;
-    }
-
-    @Override
-    public void useEffects(Player player, CustomItems.UseType useType) {
-        Snowball snowball = player.launchProjectile(Snowball.class);
-        float projectileSpeed = 2;
-        snowball.setVelocity(snowball.getVelocity().multiply(projectileSpeed));
-        snowball.setGravity(false);
-        snowball.setVisualFire(true);
-        snowball.setGlowing(true);
-        snowball.setItem(new ItemBuilder(Material.COAL,1).addEnchantmentGlint().build());
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                snowball.remove();
-            }
-        }.runTaskLater(Main.getPlugin(),5*20);
-    }
-
-    @Override
-    public ItemStack getAmmoItem(CustomItems.UseType useType) {
+    
+    public ItemStack getAmmoItem() {
         return new ItemBuilder(Material.QUARTZ,1).build();
     }
-
-    @Override
-    public double getDamage() {
-        return 8;
-    }
-
-    @Override
+    
     public void rangedHit(Player player, ProjectileHitEvent event) {
-        Weapon.super.rangedHit(player, event);
+        super.rangedHit(player, event);
         Block block = event.getHitBlock();
-        if(block != null &&block.getType().isBurnable()) block.setType(Material.FIRE);
+        BlockFace blockFace = event.getHitBlockFace();
+        if(blockFace != null&& block!= null &&block.getType().isBurnable()) {
+            Block fireblock = block.getRelative(blockFace);
+            if(!fireblock.getType().toString().toLowerCase().contains("air")) return;
+            fireblock.setType(Material.FIRE);
+            Fire fire = (Fire) Bukkit.createBlockData(Material.FIRE);
+            fire.getFaces().forEach((fireFace)->fire.setFace(fireFace, false));
+            if(fire.getAllowedFaces().contains(blockFace.getOppositeFace())) fire.setFace(blockFace.getOppositeFace(),true);
+            fireblock.setBlockData(fire);
+        }
     }
 
-    @Override
+    
     public boolean hasRequirements(Player player) {
         return true;
     }

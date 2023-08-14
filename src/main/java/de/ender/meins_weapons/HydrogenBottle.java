@@ -19,7 +19,7 @@ public class HydrogenBottle extends CustomItem {
         ItemStack item = new ItemBuilder(Material.POTION,1).setName(getName()).build();
         PotionMeta potion = (PotionMeta) item.getItemMeta();
         potion.setColor(Color.fromRGB(174,226,253));
-        potion.getCustomEffects().forEach((potionEffect -> potion.removeCustomEffect(potionEffect.getType())));
+        //potion.getCustomEffects().forEach((potionEffect -> potion.removeCustomEffect(potionEffect.getType())));
         item.setItemMeta(potion);
         return item;
     }

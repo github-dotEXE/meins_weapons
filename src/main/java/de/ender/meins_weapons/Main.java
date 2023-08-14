@@ -29,6 +29,8 @@ public final class Main extends JavaPlugin {
         new Sniper().init();
         new ShellBullet().init();
         new Shotgun().init();
+        new FlameThrower().init();
+        new HydrogenBottle().init();
     }
 
     @Override

@@ -14,41 +14,53 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
-public class WandOfFire extends Weapon {
+import java.util.Random;
+
+public class FlameThrower extends Weapon {
 
 
-    public WandOfFire() {
-        super("Wand-of-Fire", Main.getPlugin(), 1, 8, false, false,
-                false, Sound.ITEM_FIRECHARGE_USE, 1, 2);
+    public FlameThrower() {
+        super("Flamethrower", Main.getPlugin(), 0.1f, 2, false, false,
+                false, Sound.ITEM_FIRECHARGE_USE, 0.5f, 1.5f);
     }
     
     public ItemStack getItemStack() {
-        return new ItemBuilder(Material.STICK,1).addEnchantmentGlint().setName("<aqua>"+getName()).build();
+        return new ItemBuilder(Material.BLAZE_POWDER,1).setName("<aqua>"+getName()).build();
     }
 
     
     public ShapedRecipe getRecipe() {
         return super.getRecipe().shape(
-                "F  ",
-                " S ",
-                "  S")
-                .setIngredient('F',new FireBall().getItem())
-                .setIngredient('S',Material.STICK);
+                "IOT",
+                " IB",
+                "  B")
+                .setIngredient('T',Material.GLASS_BOTTLE)
+                .setIngredient('B',Material.IRON_BLOCK)
+                .setIngredient('O',Material.OBSIDIAN)
+                .setIngredient('I',Material.IRON_INGOT);
     }
     
     public void rangedEntityHit(Player player, EntityDamageByEntityEvent event) {
-        event.getEntity().setFireTicks(20);
+        event.getEntity().setFireTicks(new Random().nextInt(45)+30);
         super.rangedEntityHit(player, event);
     }
     
     public void useEffects(Player player, UseType useType) {
-        shootItem(player,2,new ItemBuilder(Material.COAL,1).addEnchantmentGlint().build(),
-                0.10F,5,false,true,true);
+        shootItem(player,2,new ItemBuilder(Material.FIRE,1).build(),
+                0.10F,0.2f,false,true,false);
     }
 
-    
+    @Override
+    protected boolean hasAmmo(Player player) {
+        return true;
+    }
+    @Override
+    protected void removeAmmo(Player player) {
+
+    }
+
     public ItemStack getAmmoItem() {
-        return new ItemBuilder(Material.QUARTZ,1).build();
+        return null;
     }
     
     public void rangedHit(Player player, ProjectileHitEvent event) {
